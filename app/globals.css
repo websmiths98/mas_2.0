@@ -1,0 +1,460 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #020721;
+  --foreground: #edeef0;
+  --primary: #b03b33;
+  --secondary: #2e3454;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --font-sans: 'Manrope', sans-serif;
+  --font-satoshi: 'Satoshi', sans-serif;
+  --font-manrope: 'Manrope', sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+    font-family: var(--font-satoshi), sans-serif;
+  }
+  p {
+    @apply text-base leading-relaxed;
+    font-family: var(--font-manrope), sans-serif;
+  }
+}
+
+/* Hide scrollbar for all elements while maintaining scroll functionality */
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  -webkit-user-select: none !important; /* Safari */
+  -moz-user-select: none !important; /* Firefox */
+  -ms-user-select: none !important; /* IE10+/Edge */
+  user-select: none !important; /* Standard */
+  -webkit-user-drag: none !important; /* Prevent dragging elements */
+}
+
+input, textarea {
+  -webkit-user-select: auto !important;
+  -moz-user-select: auto !important;
+  -ms-user-select: auto !important;
+  user-select: auto !important;
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+/* ── Cinematic Hero Section Styles ── */
+
+.hero-h1 {
+  font-size: clamp(1.75rem, 5vw + 1rem, 4.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  text-align: center;
+  background: linear-gradient(180deg, #E5E4E2 0%, rgba(229, 228, 226, 0.8) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.hero-h1 span {
+  background: inherit;
+  -webkit-background-clip: inherit;
+  -webkit-text-fill-color: inherit;
+  background-clip: inherit;
+  background-attachment: fixed; /* This makes the gradient span across all words correctly */
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.5rem 1.25rem;
+  background: rgba(229, 228, 226, 0.05);
+  border: 1px solid rgba(229, 228, 226, 0.15);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #E5E4E2;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+
+.hero-badge-dot {
+  width: 8px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #10b981;
+  flex-shrink: 0;
+}
+
+.hero-h2 {
+  font-size: clamp(0.875rem, 1.2vw, 1.125rem);
+  font-weight: 600;
+  line-height: 1.6;
+  letter-spacing: -0.015em;
+  color: rgba(251, 250, 248, 0.6);
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero-h3 {
+  font-size: clamp(0.75rem, 1vw, 0.875rem);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: #E5E4E2;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.hero-h3-sep {
+  color: rgba(229, 228, 226, 0.3);
+}
+
+.hero-highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.hero-highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: clamp(0.875rem, 1.5vw, 1.125rem);
+  color: rgba(229, 228, 226, 0.8);
+}
+
+.hero-bullet {
+  width: 6px;
+  height: 6px;
+  background: #E5E4E2;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(229, 228, 226, 0.6);
+}
+
+.hero-cta-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .hero-cta-row {
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .hero-cta-primary, .hero-cta-secondary {
+    padding: 1rem 2rem;
+    font-size: 0.75rem;
+    width: 100%;
+    max-width: 280px;
+    text-align: center;
+  }
+}
+
+.hero-cta-primary {
+  background: linear-gradient(135deg, #a99b9b 0%, #1c01a0 100%);
+  color: #E5E4E2;
+  padding: 1.15rem 2.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+  text-decoration: none;
+  border: 1px solid rgba(229, 228, 226, 0.1);
+}
+
+.hero-cta-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(124, 58, 237, 0.5);
+  filter: brightness(1.1);
+}
+
+.hero-cta-secondary {
+  background: rgba(229, 228, 226, 0.02);
+  border: 1px solid rgba(229, 228, 226, 0.08);
+  color: #E5E4E2;
+  padding: 1.15rem 2.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+}
+
+.hero-cta-secondary:hover {
+  background: rgba(229, 228, 226, 0.08);
+  border-color: rgba(229, 228, 226, 0.2);
+  transform: translateY(-2px);
+}
+
+.hero-cta-arrow {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-cta-secondary:hover .hero-cta-arrow {
+  transform: translateX(4px);
+}
+
+.hero-trust {
+  font-size: 0.875rem;
+  color: rgba(229, 228, 226, 0.5);
+  margin-top: 1.5rem;
+  max-width: 500px;
+}
+
+/* Scroll indicator */
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 40px;
+  border: 1px solid rgba(229, 228, 226, 0.3);
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  padding-top: 6px;
+  z-index: 10;
+}
+
+.hero-scroll-dot {
+  width: 4px;
+  height: 8px;
+  background: rgba(229, 228, 226, 0.8);
+  border-radius: 2px;
+  animation: scrollDot 2s infinite ease-in-out;
+}
+
+@keyframes scrollDot {
+  0% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(16px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+@keyframes blob {
+  0% { transform: translate(0px, 0px) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+/* ─── Custom Quote Button (Flying Plane) ─── */
+.hero-quote-btn {
+  font-family: inherit;
+  font-size: 14px;
+  background: #4169e1; /* Royal Blue */
+  color: #E5E4E2;
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.hero-quote-btn span {
+  display: block;
+  margin-left: 0.5em;
+  transition: all 0.3s ease-in-out;
+}
+
+.hero-quote-btn svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+.hero-quote-btn:hover .svg-wrapper {
+  animation: fly-plane 0.6s ease-in-out infinite alternate;
+}
+
+.hero-quote-btn:hover svg {
+  transform: translateX(1.5em) rotate(45deg) scale(1.1);
+}
+
+.hero-quote-btn:hover span {
+  transform: translateX(6em);
+}
+
+.hero-quote-btn:active {
+  transform: scale(0.95);
+}
+
+@keyframes fly-plane {
+  from {
+    transform: translateY(0.1em);
+  }
+  to {
+    transform: translateY(-0.1em);
+  }
+}
+/* ─── Cobe Globe Anchored Labels ─── */
+.marker-label {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 20;
+  transition: opacity 0.3s, filter 0.3s, transform 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Chrome 125+ Anchor Positioning */
+@supports (anchor-name: --cobe-anchor) {
+  .marker-label {
+    position-anchor: var(--anchor-name);
+    top: anchor(top);
+    left: anchor(center);
+    transform: translate(-50%, -100%) translateY(-10px);
+  }
+}
+
+/* Fallback for older browsers: Cobe also provides top/left vars if needed, 
+   but for now we'll focus on the modern implementation the user requested */
+/* Fullscreen Layout Utilities */
+.page-container-fixed {
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.content-flex-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Lenis Smooth Scrolling Default Styles ── */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* ── Cinematic Animation Engine ── */
+:root {
+  --ease-cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Base Reveal States */
+.reveal-hidden { opacity: 0; filter: blur(10px); transform: translateY(40px); }
+.reveal-left-hidden { opacity: 0; filter: blur(10px); transform: translateX(-60px); }
+.reveal-right-hidden { opacity: 0; filter: blur(10px); transform: translateX(60px); }
+.reveal-scale-hidden { opacity: 0; transform: scale(0.88); }
+
+/* Active States */
+.reveal-visible {
+  opacity: 1; filter: blur(0px); transform: translate(0, 0) scale(1);
+  transition-property: opacity, transform, filter;
+  transition-duration: 1.2s;
+  transition-timing-function: var(--ease-cinematic);
+}
+
+/* Stagger Utilities */
+.stagger-0 { transition-delay: 0ms; }
+.stagger-1 { transition-delay: 130ms; }
+.stagger-2 { transition-delay: 260ms; }
+.stagger-3 { transition-delay: 390ms; }
+.stagger-4 { transition-delay: 520ms; }
+.stagger-5 { transition-delay: 650ms; }
+.stagger-6 { transition-delay: 780ms; }
+.stagger-7 { transition-delay: 910ms; }
+.stagger-8 { transition-delay: 1040ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes pendulum {
+  0% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+  100% { transform: rotate(-5deg); }
+}
