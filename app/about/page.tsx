@@ -10,7 +10,7 @@ import { TextReveal } from "@/app/components/TextReveal";
 import aboutTeamHero from "../../public/images_frontend/about-team-logistics.webp";
 import officeSpace from "../../public/images_frontend/new/office_space.webp";
 import masLogo from "../../public/images_frontend/mas_without_wording.png";
-
+import SlidingLogoMarquee, { SlidingLogoMarqueeItem } from "../components/SlidingLogoMarquee";
 const NAV_LINKS = [
     { name: "Home", href: "/" },
     { name: "Services", href: "/#section-services" },
@@ -286,65 +286,64 @@ type LogoItem = {
 };
 
 const LOGOS_ROW_1: LogoItem[] = [
-    { file: "adidas.webp", bg: "#0a1128" },
-    { file: "clarks.webp", bg: "#1e293b" },
-    { file: "erasebg-transformed.png", bg: "#111827" },
-    { file: "hd_restoration_result_image (1).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (10).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (11).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (12).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image (13).png", bg: "#111827" },
-    { file: "hd_restoration_result_image (14).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (15).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (16).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (17).png", bg: "#1e293b" },
+    { file: "Gap_logo.png", bg: "#0a1128" },
+    { file: "clarks.png", bg: "#111827" },
+    { file: "erasebg-transformed.png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (1).png", bg: "#1e1b4b" },
+    { file: "hd_restoration_result_image (10).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (11).png", bg: "#1e293b" },
+    { file: "hd_restoration_result_image (12).png", bg: "#111827" },
+    { file: "hd_restoration_result_image (13).png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (14).png", bg: "#1e1b4b" },
+    { file: "adidas.png", bg: "#1e293b" },
+    { file: "hd_restoration_result_image (16).png", bg: "#1e293b" },
     { file: "hd_restoration_result_image (18).png", bg: "#111827" },
     { file: "hd_restoration_result_image (19).png", bg: "#0f172a" },
     { file: "hd_restoration_result_image (2).png", bg: "#1e1b4b" },
     { file: "hd_restoration_result_image (20).png", bg: "#0a1128" },
     { file: "hd_restoration_result_image (21).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image (22).png", bg: "#111827" },
-    { file: "hd_restoration_result_image (23).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (24).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (25).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (26).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image (27).png", bg: "#111827" },
-    { file: "hd_restoration_result_image (28).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (29).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (3).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (30).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image (31).png", bg: "#111827" },
+    { file: "hd_restoration_result_image (23).png", bg: "#111827" },
+    { file: "hd_restoration_result_image (24).png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (25).png", bg: "#1e1b4b" },
+    { file: "hd_restoration_result_image (26).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (27).png", bg: "#1e293b" },
+    { file: "hd_restoration_result_image (28).png", bg: "#111827" },
+    { file: "hd_restoration_result_image (29).png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (3).png", bg: "#1e1b4b" },
+    { file: "hd_restoration_result_image (30).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (31).png", bg: "#1e293b" },
+    { file: "hd_restoration_result_image (15).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (32).png", bg: "#111827" },
 ];
 
 const LOGOS_ROW_2: LogoItem[] = [
-    { file: "hd_restoration_result_image (32).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (33).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (34).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (35).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image (36).png", bg: "#111827" },
-    { file: "hd_restoration_result_image (37).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (38).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (39).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (4).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image (40).png", bg: "#111827" },
-    { file: "hd_restoration_result_image (41).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (42).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (43).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (44).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image (45).png", bg: "#111827" },
-    { file: "hd_restoration_result_image (46).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (47).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (48).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (49).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image (5).png", bg: "#111827" },
-    { file: "hd_restoration_result_image (6).png", bg: "#0f172a" },
-    { file: "hd_restoration_result_image (7).png", bg: "#1e1b4b" },
-    { file: "hd_restoration_result_image (8).png", bg: "#0a1128" },
-    { file: "hd_restoration_result_image (9).png", bg: "#1e293b" },
-    { file: "hd_restoration_result_image.png", bg: "#111827" },
-    { file: "puma.png", bg: "#0f172a" },
-    { file: "siemens_logo.png", bg: "#1e1b4b" },
-    { file: "trivitron-healthcare_logo.webp", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (33).png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (34).png", bg: "#1e1b4b" },
+    { file: "hd_restoration_result_image (35).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (36).png", bg: "#1e293b" },
+    { file: "hd_restoration_result_image (37).png", bg: "#111827" },
+    { file: "hd_restoration_result_image (38).png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (39).png", bg: "#1e1b4b" },
+    { file: "hd_restoration_result_image (4).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (40).png", bg: "#1e293b" },
+    { file: "hd_restoration_result_image (41).png", bg: "#111827" },
+    { file: "hd_restoration_result_image (42).png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (43).png", bg: "#1e1b4b" },
+    { file: "hd_restoration_result_image (44).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (45).png", bg: "#1e293b" },
+    { file: "hd_restoration_result_image (46).png", bg: "#111827" },
+    { file: "hd_restoration_result_image (47).png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (48).png", bg: "#1e1b4b" },
+    { file: "hd_restoration_result_image (49).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image (5).png", bg: "#1e293b" },
+    { file: "hd_restoration_result_image (6).png", bg: "#111827" },
+    { file: "hd_restoration_result_image (7).png", bg: "#0f172a" },
+    { file: "hd_restoration_result_image (8).png", bg: "#1e1b4b" },
+    { file: "hd_restoration_result_image (9).png", bg: "#0a1128" },
+    { file: "hd_restoration_result_image.png", bg: "#1e293b" },
+    { file: "siemens_logo.png", bg: "#111827" },
+    { file: "toyo_logo.gif", bg: "#0f172a" },
+    { file: "trivitron-healthcare_logo.webp", bg: "#1e1b4b" },
 ];
 
 
@@ -608,84 +607,34 @@ export default function About({ isEmbedded = false }: AboutProps) {
             </section> */}
 
             {/* Our Clients — infinite marquee logo cloud (Shiprocket-style) */}
-            <section data-theme="light" className="overflow-hidden bg-[#020721] py-14 md:py-20">
-                <style>{`
-                    @keyframes mas-marquee-left {
-                        0%   { transform: translateX(0); }
-                        100% { transform: translateX(-50%); }
-                    }
-                    @keyframes mas-marquee-right {
-                        0%   { transform: translateX(-50%); }
-                        100% { transform: translateX(0); }
-                    }
-                    .mas-marquee-track-left {
-                        display: flex;
-                        width: max-content;
-                        animation: mas-marquee-left 60s linear infinite;
-                    }
-                    .mas-marquee-track-right {
-                        display: flex;
-                        width: max-content;
-                        animation: mas-marquee-right 60s linear infinite;
-                    }
-                    .mas-marquee-track-left:hover, .mas-marquee-track-right:hover {
-                        animation-play-state: paused;
-                    }
-                `}</style>
-
+            <section data-theme="light" className="overflow-hidden bg-white py-14 md:py-20">
                 <div className="mx-auto mb-10 max-w-3xl px-6 text-center flex flex-col items-center">
                     <AnimatedText text="Our clients" className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-400 font-manrope" />
-                    <AnimatedText text="Trusted by leading companies" className="mt-2 text-2xl font-semibold tracking-tight text-[#edeef0] md:text-3xl font-satoshi" delay={0.1} direction="up" />
+                    <AnimatedText text="Trusted by leading companies" className="mt-2 text-2xl font-semibold tracking-tight text-black md:text-3xl font-satoshi" delay={0.1} direction="up" />
                 </div>
 
-                <div className="bg-slate-50 rounded-[2.5rem] py-12 mx-4 md:mx-10 relative shadow-[inset_0_4px_24px_rgba(0,0,0,0.08)] border border-white/60 overflow-hidden">
-                    <div className="relative flex flex-col gap-8">
-                        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 md:w-48 bg-gradient-to-r from-slate-50 to-transparent" />
-                        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 md:w-48 bg-gradient-to-l from-slate-50 to-transparent" />
-
-                    {/* Row 1 - Moves Left */}
-                    <div className="mas-marquee-track-left hover-pause">
-                        {[...LOGOS_ROW_1, ...LOGOS_ROW_1].map((logo, idx) => (
-                            <div
-                                key={`row1-${idx}`}
-                                className="mx-3 flex h-[100px] w-[240px] flex-shrink-0 cursor-default items-center justify-center transition-transform duration-300 hover:scale-105 relative"
-                            >
+                <div className="relative w-full flex flex-col gap-16 py-12 overflow-hidden">
+                    <SlidingLogoMarquee
+                        items={[...LOGOS_ROW_1, ...LOGOS_ROW_2].map((logo, idx) => ({
+                            id: `logo-${idx}`,
+                            content: (
                                 <img
                                     src={`/logo_mas/${logo.file}`}
-                                    alt={`Partner Logo ${idx}`}
-                                    className="w-full h-full object-contain scale-[1.35] transition-all duration-300 hover:opacity-100 mix-blend-multiply"
-                                    style={{
-                                        opacity: 0.8,
-                                        transform: `scale(${logo.scale || 1}) translateZ(0)`,
-                                        willChange: "transform"
-                                    }}
+                                    alt="Client Logo"
+                                    className="w-[180px] h-[100px] object-contain"
                                 />
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Row 2 - Moves Right */}
-                    <div className="mas-marquee-track-right hover-pause">
-                        {[...LOGOS_ROW_2, ...LOGOS_ROW_2].map((logo, idx) => (
-                            <div
-                                key={`row2-${idx}`}
-                                className="mx-3 flex h-[100px] w-[240px] flex-shrink-0 cursor-default items-center justify-center transition-transform duration-300 hover:scale-105 relative"
-                            >
-                                <img
-                                    src={`/logo_mas/${logo.file}`}
-                                    alt={`Partner Logo ${idx}`}
-                                    className="w-full h-full object-contain scale-[1.35] transition-all duration-300 hover:opacity-100 mix-blend-multiply"
-                                    style={{
-                                        opacity: 0.8,
-                                        transform: `scale(${logo.scale || 1}) translateZ(0)`,
-                                        willChange: "transform"
-                                    }}
-                                />
-                            </div>
-                        ))}
-                    </div>
+                            )
+                        }))}
+                        speed={1}
+                        pauseOnHover={true}
+                        enableBlur={true}
+                        blurIntensity={1}
+                        height="120px"
+                        width="100%"
+                        gap="3rem"
+                        showControls={false}
+                    />
                 </div>
-            </div>
             </section>
 
 

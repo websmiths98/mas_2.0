@@ -17,7 +17,7 @@ export default function Home() {
       </div>
 
       <div id="services" className="w-full relative z-10">
-        <ServicesPage isEmbedded={true} />
+        <ServicesPage />
       </div>
 
       <div id="network" className="w-full relative z-10">

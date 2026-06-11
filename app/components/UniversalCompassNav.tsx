@@ -46,14 +46,14 @@ export default function UniversalCompassNav() {
   };
 
   return (
-    <div 
+    <div
       className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[100] flex flex-col items-center justify-center pointer-events-auto"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={() => setIsHovered(!isHovered)}
     >
       <div className="relative flex items-center justify-center w-24 h-24 rounded-full bg-slate-900/40 backdrop-blur-md border border-white/10 shadow-[0_0_20px_rgba(2,7,33,0.5)] transition-all duration-300 hover:bg-slate-800/60 hover:scale-110 cursor-pointer">
-        
+
         {/* Rotating Compass Dial */}
         <style>{`
           @keyframes infinite-spin {
@@ -61,7 +61,7 @@ export default function UniversalCompassNav() {
             to { transform: rotate(360deg); }
           }
         `}</style>
-        <div 
+        <div
           className="absolute inset-0 w-full h-full text-[var(--foreground)]/50 p-[8px]"
           style={{ animation: 'infinite-spin 25s linear infinite' }}
         >
@@ -74,12 +74,12 @@ export default function UniversalCompassNav() {
 
         {/* Center Needle */}
         <div className="relative z-10 w-10 h-10 flex items-center justify-center">
-           <motion.svg 
-             className="w-10 h-10 drop-shadow-[0_0_8px_rgba(176,59,51,0.5)]" 
-             viewBox="0 0 24 24" 
-             animate={{ rotate: { home: 0, services: 90, industry: 180, about: 270 }[activeSection] || 0 }}
-             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-           >
+          <motion.svg
+            className="w-10 h-10 drop-shadow-[0_0_8px_rgba(176,59,51,0.5)]"
+            viewBox="0 0 24 24"
+            animate={{ rotate: { home: 0, services: 90, industry: 180, about: 270 }[activeSection] || 0 }}
+            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+          >
             <path d="M12 2 L22 22 L12 17 L2 22 Z" fill="url(#needleGrad)" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
             <defs>
               <linearGradient id="needleGrad" x1="0" y1="0" x2="0" y2="1">
@@ -101,19 +101,29 @@ export default function UniversalCompassNav() {
                 return (
                   <motion.div
                     key={item.name}
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0, scale: 0, y: item.pos.includes("top") ? 10 : item.pos.includes("bottom") ? -10 : 0, x: item.pos.includes("left") ? 10 : item.pos.includes("right") ? -10 : 0 }}
+                    animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
                     exit={{ opacity: 0, scale: 0 }}
-                    transition={{ delay: idx * 0.05, type: 'spring', stiffness: 300, damping: 20 }}
+                    transition={{ delay: idx * 0.05, type: 'spring', stiffness: 400, damping: 25 }}
                     className={`absolute ${item.pos}`}
                   >
-                    <a 
-                      href={item.href}
-                      onClick={(e) => handleClick(e, item.href)}
-                      className={`block px-3 py-1.5 text-xs font-semibold rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center backdrop-blur-md transition-all bg-[var(--primary)] text-white shadow-[0_0_15px_rgba(176,59,51,0.6)]`}
-                    >
-                      {item.name}
-                    </a>
+                    <div className="relative group cursor-pointer">
+                      {/* Tooltip Pointing Arrow */}
+                      <div className={`absolute w-3.5 h-3.5 bg-black border-white/10 z-0 shadow-[0_0_15px_rgba(0,0,0,0.8)] transition-transform duration-300 group-hover:scale-110 ${
+                        item.pos.includes("top") ? "bottom-[-5px] left-1/2 -translate-x-1/2 rotate-45 border-b border-r" :
+                        item.pos.includes("bottom") ? "top-[-5px] left-1/2 -translate-x-1/2 rotate-45 border-t border-l" :
+                        item.pos.includes("right") ? "left-[-5px] top-1/2 -translate-y-1/2 rotate-45 border-b border-l" :
+                        "right-[-5px] top-1/2 -translate-y-1/2 rotate-45 border-t border-r"
+                      }`} />
+
+                      <a
+                        href={item.href}
+                        onClick={(e) => handleClick(e, item.href)}
+                        className={`relative z-10 block px-4 py-2 text-xs font-bold tracking-wide rounded-xl min-h-[36px] min-w-[70px] flex items-center justify-center backdrop-blur-md transition-all duration-300 bg-black text-white shadow-[0_0_15px_rgba(0,0,0,0.8)] border border-white/10 group-hover:scale-110 group-hover:border-white/30`}
+                      >
+                        {item.name}
+                      </a>
+                    </div>
                   </motion.div>
                 );
               })}

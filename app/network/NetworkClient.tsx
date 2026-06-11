@@ -1,7 +1,13 @@
 "use client";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import createGlobe from "cobe";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 import {
   motion,
   useScroll,
@@ -10,7 +16,7 @@ import {
   useInView,
   AnimatePresence,
 } from "framer-motion";
-import { AppleGlassNav } from "@/app/components/AppleGlassNav";
+// import { AppleGlassNav } from "@/app/components/AppleGlassNav";
 import { TextReveal } from "@/app/components/TextReveal";
 import Image from "next/image";
 import Link from "next/link";
@@ -439,7 +445,7 @@ function Globe({ isMobile }: { isMobile?: boolean }) {
         from: route.from as [number, number],
         to: route.to as [number, number],
         id: route.id,
-        color: [0.1, 0.8, 1.0] as [number, number, number],
+        color: [0.7, 0.75, 0.85] as [number, number, number],
       })),
     []
   );
@@ -476,15 +482,15 @@ function Globe({ isMobile }: { isMobile?: boolean }) {
         scale: 0.83,
         mapSamples: 32000,
         mapBrightness: 6.0,
-        baseColor: [0.05, 0.1, 0.2],
-        markerColor: [0.1, 0.8, 1.0],
-        glowColor: [0.05, 0.1, 0.2],
+        baseColor: [0.1, 0.15, 0.3], // Deeper, more subtle slate blue
+        markerColor: [1.0, 1.0, 1.0], // Clean white markers
+        glowColor: [0.05, 0.1, 0.25], // Subtle deep glow
         offset: isMobileRef.current ? [0, 150] : [100, 0],
         markers,
         arcs,
-        arcColor: [0.1, 0.8, 1.0],
-        arcWidth: 1.0,
-        arcHeight: 0.5,
+        arcColor: [0.7, 0.75, 0.85], // Elegant silver/light-blue arcs
+        arcWidth: 0.5, // Thinner, more delicate lines
+        arcHeight: 0.4,
         markerElevation: 0.04,
       });
 
@@ -525,9 +531,11 @@ function Globe({ isMobile }: { isMobile?: boolean }) {
 
   return (
     <div ref={containerRef} className="relative aspect-square w-full select-none">
+      {/* Scalable background to allow mix-blend-screen to work without a sharp halo. The globe radius is ~41.5%, so we fade to transparent precisely at that edge. */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#020617_38%,transparent_42%)] pointer-events-none" />
       <canvas
         ref={canvasRef}
-        className="h-full w-full cursor-grab touch-none drop-shadow-[0_0_60px_rgba(59,130,246,0.25)]"
+        className="h-full w-full cursor-grab touch-none mix-blend-screen drop-shadow-[0_0_60px_rgba(59,130,246,0.25)]"
         onPointerDown={(e) => {
           dragging.current = true;
           lastX.current = e.clientX;
@@ -596,7 +604,7 @@ function ParallaxImage({ src, active, isMobile }: { src: string; active: boolean
           priority
           className={cn(
             "object-cover object-center transition-all duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]",
-            active ? "scale-[1.15] opacity-80 blur-0" : "scale-[1.05] opacity-20 blur-[2px]"
+            active ? "scale-[1.15] opacity-100 brightness-110 blur-0" : "scale-[1.05] opacity-40 blur-[2px]"
           )}
         />
       </motion.div>
@@ -622,6 +630,101 @@ function ParallaxSection({ children, speed = 1, className, isMobile }: { childre
 // ============================================================================
 // MAIN PAGE COMPONENT
 // ============================================================================
+
+function DimensionShifter({ steps, images, isMobile }: { steps: typeof WORKFLOW_STEPS, images: typeof STEP_IMAGES, isMobile: boolean }) {
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    let ctx = gsap.context(() => {
+      const sections = gsap.utils.toArray(".h-item");
+      const scrollTween = gsap.to(sections, {
+        xPercent: -100 * (sections.length - 1),
+        ease: "none",
+        scrollTrigger: {
+          trigger: triggerRef.current,
+          pin: true,
+          scrub: 1,
+          snap: 1 / (sections.length - 1),
+          end: () => "+=" + (sectionRef.current as unknown as HTMLElement).offsetWidth
+        }
+      });
+    }, triggerRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={triggerRef} className="w-full bg-[var(--background)] py-10 md:py-14 shadow-[0_-20px_50px_-15px_rgba(0,0,0,0.5)] border-t border-[var(--secondary)]/30 overflow-hidden">
+      <div className="max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-20 space-y-8 mb-8">
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="h-px w-8 bg-[var(--primary)]" />
+            <span className="text-[10px] font-bold tracking-[0.4em] text-[var(--primary)] uppercase">Our Working Approach</span>
+          </div>
+          <h2 aria-label="How We Work" className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
+            {"How We".split(" ").map((word, i) => (
+              <motion.span
+                aria-hidden="true"
+                key={`s2w1-${i}`}
+                style={{ display: "inline-block", marginRight: "0.25em" }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+                transition={{ duration: 0.8, delay: 0.4 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {word}
+              </motion.span>
+            ))}
+            {"Work".split(" ").map((word, i) => (
+              <motion.span
+                aria-hidden="true"
+                key={`s2w2-${i}`}
+                style={{ display: "inline-block", marginRight: "0.25em", paddingBottom: "0.1em" }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: false }}
+                transition={{ duration: 0.8, delay: 0.4 + (2 + i) * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]"
+              >
+                {word}
+              </motion.span>
+            ))}
+          </h2>
+        </div>
+      </div>
+
+      <div ref={sectionRef} className="flex flex-nowrap w-[500%] h-[500px] md:h-[450px]">
+        {steps.map((step, i) => (
+          <div key={step.num} className="h-item w-screen flex-shrink-0">
+            <div className="relative w-full h-full overflow-hidden border-r border-blue-500/20 shadow-2xl shadow-blue-500/5">
+              <ParallaxImage src={images[i]} active={true} isMobile={isMobile} />
+              <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+                <div className="absolute inset-0 bg-neutral-950/10 mix-blend-multiply" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/30 to-transparent opacity-100" />
+              </div>
+
+              <div className="relative h-full w-full flex flex-col justify-between p-6 md:p-8 z-20">
+                <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 text-blue-400 flex-shrink-0 backdrop-blur-md">
+                  <span className="text-lg font-black tracking-tight">{step.num}</span>
+                </div>
+
+                <div className="mt-6 md:mt-0 max-w-xl overflow-hidden w-full">
+                  <h4 className="text-white font-extrabold text-xl md:text-2xl mb-3 text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-blue-200 drop-shadow-md truncate">
+                    {step.title}
+                  </h4>
+                  <p className="text-zinc-200 text-sm md:text-base font-normal leading-relaxed drop-shadow">
+                    {step.sub}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export default function NetworkClient() {
   const [isMobile, setIsMobile] = useState(false);
@@ -805,15 +908,9 @@ export default function NetworkClient() {
               ))}
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: false }}
-              transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
-              className="w-[150%] max-w-[900px] -ml-[25%] lg:-ml-[10%] lg:w-[130%]"
-            >
+            <div className="w-[150%] max-w-[900px] -ml-[25%] lg:-ml-[10%] lg:w-[130%]">
               <Globe isMobile={isMobile} />
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -900,129 +997,8 @@ export default function NetworkClient() {
           </section>
         )}
 
-        {/* ── SECTION 2: OUR WORKING APPROACH ── */}
-        <section className="w-full bg-[var(--background)] py-10 md:py-14 shadow-[0_-20px_50px_-15px_rgba(0,0,0,0.5)] border-t border-[var(--secondary)]/30">
-          <div className="max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-20 space-y-8">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="h-px w-8 bg-[var(--primary)]" />
-                <span className="text-[10px] font-bold tracking-[0.4em] text-[var(--primary)] uppercase">Our Working Approach</span>
-              </div>
-              <h2 aria-label="How We Work" className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight">
-                {"How We".split(" ").map((word, i) => (
-                  <motion.span
-                    aria-hidden="true"
-                    key={`s2w1-${i}`}
-                    style={{ display: "inline-block", marginRight: "0.25em" }}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
-                    transition={{ duration: 0.8, delay: 0.4 + i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-                {"Work".split(" ").map((word, i) => (
-                  <motion.span
-                    aria-hidden="true"
-                    key={`s2w2-${i}`}
-                    style={{ display: "inline-block", marginRight: "0.25em", paddingBottom: "0.1em" }}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: false }}
-                    transition={{ duration: 0.8, delay: 0.4 + (2 + i) * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                    className="text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)]"
-                  >
-                    {word}
-                  </motion.span>
-                ))}
-              </h2>
-            </div>
-
-            {/* Elastic accordion container wrapper */}
-            <div className="flex flex-col md:flex-row gap-4 w-full h-[500px] md:h-[450px]">
-              {WORKFLOW_STEPS.map((step, i) => (
-                <motion.div
-                  key={step.num}
-                  layout
-                  onClick={() => setActiveStep(i)}
-                  onHoverStart={() => setActiveStep(i)}
-                  className={cn(
-                    "relative overflow-hidden rounded-3xl border transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)] cursor-pointer min-h-[140px] md:min-h-0",
-                    activeStep === i
-                      ? "flex-[8] border-blue-500/40 shadow-2xl shadow-blue-500/5"
-                      : "flex-[1] border-slate-300 hover:border-slate-400"
-                  )}
-                >
-                  {/* ── LOGO BACKGROUND IMAGE FILL ── */}
-                  <ParallaxImage src={STEP_IMAGES[i]} active={activeStep === i} isMobile={isMobile} />
-
-                  <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
-                    {/* Dark gradient overlay layers ensuring clear typography contrast over the image */}
-                    <div className="absolute inset-0 bg-neutral-950/20 mix-blend-multiply" />
-                    <div className={cn(
-                      "absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent transition-all duration-500",
-                      activeStep === i ? "opacity-100" : "opacity-95"
-                    )} />
-                  </div>
-
-                  {/* 1. COLLAPSED VERTICAL LABEL LAYER (Visible only on desktop when card is inactive) */}
-                  <div className={cn(
-                    "absolute inset-0 hidden md:flex items-center justify-center transition-opacity duration-300 z-20",
-                    activeStep === i ? "opacity-0 pointer-events-none" : "opacity-100"
-                  )}>
-                    <div className="flex flex-col items-center gap-4 transform -rotate-90 whitespace-nowrap">
-                      <span className="text-lg font-black text-zinc-500">
-                        <TextReveal>{step.num}</TextReveal>
-                      </span>
-                      <h4 className="text-zinc-300 font-bold tracking-wide uppercase text-xs">
-                        <TextReveal>{step.shortLabel}</TextReveal>
-                      </h4>
-                    </div>
-                  </div>
-
-                  {/* 2. EXPANDED CONTENT / MOBILE STACK LAYER (Positioned directly over logo background) */}
-                  <div className={cn(
-                    "relative h-full w-full flex flex-col justify-between p-6 md:p-8 transition-all duration-500 z-20",
-                    activeStep === i ? "opacity-100 scale-100" : "md:opacity-0 md:scale-95 md:pointer-events-none"
-                  )}>
-                    {/* Step Badge */}
-                    <div className="w-12 h-12 flex items-center justify-center rounded-xl bg-white/10 border border-white/10 text-blue-400 flex-shrink-0 backdrop-blur-md">
-                      <span className="text-lg font-black tracking-tight">
-                        <TextReveal>{step.num}</TextReveal>
-                      </span>
-                    </div>
-
-                    {/* Text details directly overlaid on top of the logo image asset */}
-                    <div className="mt-6 md:mt-0 max-w-xl overflow-hidden w-full">
-                      <div className={cn(
-                        "transition-all duration-300",
-                        activeStep === i ? "" : "md:whitespace-nowrap"
-                      )}>
-                        <motion.h4
-                          layout="position"
-                          className="text-white font-extrabold text-xl md:text-2xl mb-3 text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-blue-200 drop-shadow-md truncate"
-                        >
-                          <TextReveal>{step.title}</TextReveal>
-                        </motion.h4>
-                        <motion.p
-                          layout="position"
-                          className={cn(
-                            "text-zinc-200 text-sm md:text-base font-normal leading-relaxed drop-shadow transition-opacity duration-200",
-                            activeStep === i ? "opacity-100" : "md:opacity-0"
-                          )}
-                        >
-                          <TextReveal>{step.sub}</TextReveal>
-                        </motion.p>
-                      </div>
-                    </div>
-                  </div>
-
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
+        {/* ── SECTION 2: OUR WORKING APPROACH (GSAP Dimension Shifter) ── */}
+        <DimensionShifter steps={WORKFLOW_STEPS} images={STEP_IMAGES} isMobile={isMobile} />
 
         {/* <div className="max-w-7xl mx-auto w-full px-6 md:px-12 lg:px-20 space-y-40 mt-32">
           <section className="py-14 relative overflow-hidden">
