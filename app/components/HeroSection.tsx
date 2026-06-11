@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { RevealWrapper } from "@/app/animations/RevealWrapper";
 import { useParallax } from "@/app/animations/useParallax";
@@ -16,24 +16,72 @@ export default function HeroSection() {
   // yText moves down 150px when scrolled 1000px down (creating 3D depth between BG and text)
   const yText = useParallax(150);
 
+  const videos = [
+    { src: "/hero-video.webm", type: "video/webm" },
+    { src: "/assets_log/hero2_log.webm", type: "video/webm" },
+    { src: "/assets_log/hero3_log.webm", type: "video/webm" }
+  ];
+
+  const contentData = [
+    {
+      badge: "Seamless Logistics Across Continents | Your Trusted Partner in Global Logistics",
+      heading: "International Freight Forwarding & Supply Chain Solutions",
+      subtitle: "MAS Logistics is a trusted international freight forwarding and supply chain management company in India delivering reliable air, sea, warehousing, and global logistics solutions tailored for seamless cross-border trade",
+    },
+    {
+      badge: "Intelligent Network | Advanced Route Optimization",
+      heading: "Next-Generation Digital Supply Chain Excellence",
+      subtitle: "Leverage real-time visibility, automated workflows, and predictive analytics to optimize your inventory, reduce transit times, and empower your global trade networks.",
+    },
+    {
+      badge: "Specialized Infrastructure | Precision Cargo Handling",
+      heading: "Engineered Solutions for Complex Logistics Needs",
+      subtitle: "From temperature-controlled pharmaceuticals to heavy-lift industrial machinery, our dedicated infrastructure ensures your critical cargo is handled with uncompromising safety.",
+    }
+  ];
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+
+  const handleVideoEnd = (index: number) => {
+    const nextIndex = (index + 1) % videos.length;
+    setCurrentVideoIndex(nextIndex);
+    if (videoRefs.current[nextIndex]) {
+      videoRefs.current[nextIndex]!.currentTime = 0;
+      videoRefs.current[nextIndex]!.play().catch(e => console.log("Video play error:", e));
+    }
+  };
+
+  useEffect(() => {
+    if (videoRefs.current[0]) {
+      videoRefs.current[0].play().catch(e => console.log("Initial play error:", e));
+    }
+  }, []);
+
   return (
     <div className="relative bg-[#020617] min-h-[100svh] w-full overflow-hidden flex items-center justify-center">
 
       {/* ── Video BG ── */}
       <motion.div style={{ transform: `translateY(${yBg}px)` }} className="absolute inset-0 z-0 h-[120%] -top-[10%] bg-[#020617]">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          // @ts-ignore
-          fetchPriority="high"
-          className="w-full h-full object-cover will-change-transform transform-gpu"
-        >
-          <source src="/hero-video.webm" type="video/webm" />
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
+        {videos.map((video, index) => (
+          <video
+            key={video.src}
+            ref={(el) => {
+              videoRefs.current[index] = el;
+            }}
+            muted
+            playsInline
+            preload="auto"
+            onEnded={() => handleVideoEnd(index)}
+            // @ts-ignore
+            fetchPriority={index === 0 ? "high" : "auto"}
+            className={`absolute inset-0 w-full h-full object-cover will-change-transform transform-gpu ${
+              index === currentVideoIndex ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          >
+            <source src={video.src} type={video.type} />
+            {index === 0 && <source src="/hero-video.mp4" type="video/mp4" />}
+          </video>
+        ))}
       </motion.div>
 
       {/* ── Dark overlay ── */}
@@ -59,50 +107,57 @@ export default function HeroSection() {
       {/* ── Hero Content ── */}
       <motion.div style={{ transform: `translateY(${yText}px)` }} className="relative z-10 w-full max-w-5xl mx-auto px-6 md:px-16 flex flex-col items-center text-center gap-6">
 
-        {/* ─ Badge ─ */}
-        <RevealWrapper staggerIndex={0}>
-          <div className="hero-badge">
-            <span className="hero-badge-dot" />
-            Seamless Logistics Across Continents | Your Trusted Partner in Global Logistics
-          </div>
-        </RevealWrapper>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentVideoIndex}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15, filter: "blur(4px)" }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="flex flex-col items-center text-center gap-6"
+          >
+            {/* ─ Badge ─ */}
+            <div className="hero-badge">
+              <span className="hero-badge-dot" />
+              {contentData[currentVideoIndex].badge}
+            </div>
 
-        {/* ─ Primary Heading ─ */}
-        <h1
-          className="hero-h1 flex flex-wrap justify-center text-center text-[#fffff5]"
-          style={{
-            textShadow: "0 0 30px rgba(255, 255, 255, 0), 0 15px 50px rgba(200, 220, 255, 0), 0 -5px 25px rgba(255, 255, 255, 0.07)"
-          }}
-        >
-          {"International Freight Forwarding & Supply Chain Solutions".split(" ").map((word, i) => (
-            <motion.span
-              key={i}
-              className="inline-block mr-[0.25em] mb-[0.1em]"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: i * 0.04 }}
+            {/* ─ Primary Heading ─ */}
+            <h1
+              className="hero-h1 flex flex-wrap justify-center text-center text-[#fffff5]"
+              style={{
+                textShadow: "0 0 30px rgba(255, 255, 255, 0), 0 15px 50px rgba(200, 220, 255, 0), 0 -5px 25px rgba(255, 255, 255, 0.07)"
+              }}
             >
-              {word}
-            </motion.span>
-          ))}
-        </h1>
+              {contentData[currentVideoIndex].heading.split(" ").map((word, i) => (
+                <motion.span
+                  key={`${currentVideoIndex}-${i}`}
+                  className="inline-block mr-[0.25em] mb-[0.1em]"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: i * 0.03 + 0.1 }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </h1>
 
-        {/* ─ Subtitle ─ */}
-        <RevealWrapper staggerIndex={2}>
-          <h2 className="hero-h2 max-w-2xl flex flex-wrap justify-center text-center">
-            {"MAS Logistics is a trusted international freight forwarding and supply chain management company in India delivering reliable air, sea, warehousing, and global logistics solutions tailored for seamless cross-border trade".split(" ").map((word, i) => (
-              <motion.span
-                key={i}
-                className="inline-block mr-[0.25em] mb-[0.1em]"
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 + i * 0.02 }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </h2>
-        </RevealWrapper>
+            {/* ─ Subtitle ─ */}
+            <h2 className="hero-h2 max-w-2xl flex flex-wrap justify-center text-center">
+              {contentData[currentVideoIndex].subtitle.split(" ").map((word, i) => (
+                <motion.span
+                  key={`${currentVideoIndex}-${i}`}
+                  className="inline-block mr-[0.25em] mb-[0.1em]"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: 0.2 + i * 0.015 }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </h2>
+          </motion.div>
+        </AnimatePresence>
 
         {/* ─ CTAs ─ */}
         <RevealWrapper staggerIndex={3}>

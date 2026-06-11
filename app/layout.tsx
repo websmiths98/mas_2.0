@@ -17,6 +17,8 @@ import Footer from "./components/Footer";
 import { SmoothScrollProvider } from "./animations/SmoothScrollProvider";
 import { MotionProvider } from "./components/MotionProvider";
 import UniversalCompassNav from "./components/UniversalCompassNav";
+import { Suspense } from "react";
+import GlobalPreloader from "./components/GlobalPreloader";
 
 export default function RootLayout({
   children,
@@ -31,6 +33,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col overflow-x-hidden">
         <MotionProvider>
           <SmoothScrollProvider>
+            <Suspense fallback={null}>
+              <GlobalPreloader />
+            </Suspense>
             <UniversalCompassNav />
             <main className="flex-grow">
               {children}
